@@ -46,7 +46,7 @@ def slid_canny(img, sigma=0.25):
 	"""apply Canny edge detector (automatic thresh)"""
 	v = np.median(img)
 	img = cv2.medianBlur(img, 5)
-	img = cv2.GaussianBlur(img, (7, 7), 2)
+	img = cv2.GaussianBlur(img, (3, 3), 2)
 	lower = int(max(0, (1.0 - sigma) * v))
 	upper = int(min(255, (1.0 + sigma) * v))
 	return cv2.Canny(img, lower, upper)
