@@ -83,7 +83,7 @@ def test(args):
 	
 ################################################################################
 
-if __name__ == "__main__":
+def crop_chess_main(thisMode, input, output):
 	utils.reset()
 
 	p = argparse.ArgumentParser(description=\
@@ -98,8 +98,13 @@ if __name__ == "__main__":
 
 	#os.system("rm test/steps/*.jpg") # FIXME: to jest bardzo grozne
 	os.system("rm -rf test/steps; mkdir test/steps")
+	#print(sys.argv[1:])
 
-	args = p.parse_args(); mode = str(args.mode[0])
+	argList = [thisMode, '--input='+ input, '--output=' + output ]
+	args = p.parse_args(argList); 
+	#print(args)
+	mode = str(args.mode[0])
+	print(args)
 	modes = {'detect': detect, 'dataset': dataset, 'train': train, 'test': test}
 
 	if mode not in modes.keys():
@@ -107,3 +112,4 @@ if __name__ == "__main__":
 
 	modes[mode](args); print(utils.clock(), "done")
 	K.clear_session(); gc.collect() # FIX: tensorflow#3388
+
