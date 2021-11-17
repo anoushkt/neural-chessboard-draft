@@ -1,6 +1,13 @@
-import gc, os, sys, glob, argparse, utils
+import gc, os, sys, glob, argparse
+import sys
+sys.path.insert(0, './neural_chessboard_draft')
+
+import utils
 print("<<< \x1b[5;32;40m neural-chessboard \x1b[0m >>>")
 
+print('path ', sys.path)
+
+print(os.getcwd())
 from config import *
 from utils import ImageObject
 from slid import pSLID, SLID, slid_tendency #== step 1
@@ -82,6 +89,8 @@ def test(args):
 	print("TEST: %d images" % len(files))
 	
 ################################################################################
+
+
 
 def crop_chess_main(thisMode, input, output):
 	utils.reset()

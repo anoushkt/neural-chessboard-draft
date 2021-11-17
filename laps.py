@@ -5,9 +5,12 @@ import cv2, numpy as np
 import scipy, scipy.cluster
 from config import *
 
+import sys
+sys.path.insert(0, './neural_chessboard_draft')
+
 from keras.models import model_from_json
-__laps_model = 'data/models/laps.model.json'
-__laps_weights = 'data/models/laps.weights.h5'
+__laps_model = './neural_chessboard_draft/data/models/laps.model.json'
+__laps_weights = './neural_chessboard_draft/data/models/laps.weights.h5'
 NC_LAPS_MODEL = model_from_json(open(__laps_model, 'r').read())
 NC_LAPS_MODEL.load_weights(__laps_weights)
 
