@@ -13,10 +13,13 @@ from utils import ImageObject
 from slid import pSLID, SLID, slid_tendency #== step 1
 from laps import LAPS                       #== step 2
 from llr import LLR, llr_pad                #== step 3
-
+import tensorflow as tf
 from keras import backend as K
+
 import cv2; load = cv2.imread
 save = cv2.imwrite
+
+
 
 #NC_SCORE = -1
 
@@ -93,7 +96,13 @@ def test(args):
 
 
 def crop_chess_main(thisMode, input, output):
+
+
+	#tf.reset_default_graph() 
+	
 	utils.reset()
+	#K.clear_session()
+	#K.clear_session()#tf.reset_default_graph()
 
 	p = argparse.ArgumentParser(description=\
 	'Find, crop and create FEN from image.')
@@ -106,7 +115,12 @@ def crop_chess_main(thisMode, input, output):
 			help='output path (default: output.jpg)')
 
 	#os.system("rm test/steps/*.jpg") # FIXME: to jest bardzo grozne
-	os.system("rm -rf test/steps; mkdir test/steps")
+	
+	try:
+		os.system("rm -rf test/steps;")
+	except:
+		m=1
+	os.system("mkdir test/steps;")
 	#print(sys.argv[1:])
 
 	argList = [thisMode, '--input='+ input, '--output=' + output ]
@@ -120,5 +134,11 @@ def crop_chess_main(thisMode, input, output):
 		utils.errn("hey, nie mamy takiej procedury!!! (wybrano: %s)" % mode)
 
 	modes[mode](args); print(utils.clock(), "done")
-	K.clear_session(); gc.collect() # FIX: tensorflow#3388
+	K.clear_session(); 
+	K.get_session().close()
+	gc.collect() # FIX: tensorflow#3388
 
+
+
+if __name__ == '__main__':
+    crop_chess_main(sys.argv[1], sys.argv[2], sys.argv[3])

@@ -5,8 +5,10 @@ import h5py
 import numpy as np
 import sys, deps
 import glob, os
-
+import keras
+#keras.backend.clear_session() 
 import keras.models
+import tensorflow as tf
 
 print("---- FASTEN YOUR SEATBELTS -----") # FIXME
 print("If it's slow, compile protobuf and tensorflow from source!")
@@ -33,7 +35,10 @@ def read_dataset(name):
 def train_network(model, X, Y, n=50):
 	if n == 0: return model
 	model.fit(X, Y, epochs=n, batch_size=64, shuffle="batch")
-	pred = model.predict(X); print("FINAL", np.mean(np.square(pred - Y)))
+	graph = tf.get_default_graph()
+	with graph.as_default():
+		pred = model.predict(X); print("FINAL", np.mean(np.square(pred - Y)))
+	
 	return model
 
 def load_model(name, best=False):

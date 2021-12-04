@@ -1,3 +1,4 @@
+from tensorflow import Graph
 import utils, debug, deps
 
 import collections
@@ -9,11 +10,24 @@ import sys
 sys.path.insert(0, './neural_chessboard_draft')
 
 from keras.models import model_from_json
+import tensorflow as tf
+
+global graph
+graph = tf.get_default_graph()
+
+
+
+#from keras import backend as K
+#K.clear_session()
+
 __laps_model = './neural_chessboard_draft/data/models/laps.model.json'
 __laps_weights = './neural_chessboard_draft/data/models/laps.weights.h5'
 NC_LAPS_MODEL = model_from_json(open(__laps_model, 'r').read())
+
 NC_LAPS_MODEL.load_weights(__laps_weights)
 
+NC_LAPS_MODEL._make_predict_function()
+#NC_LAPS_MODEL._make_predict_function()
 #from keras.utils import plot_model, print_summary
 #plot_model(NC_LAPS_MODEL, show_shapes=True, to_file='model.png')
 #print_summary(NC_LAPS_MODEL)
@@ -74,8 +88,12 @@ def laps_detector(img):
 			cv2.drawContours(_c, [cnt], 0, (0,0,255), 1)
 	
 	if i == 4: return (True, 1)
+	#import tensorflow as tf
+  
+	with graph.as_default():
+		pred = NC_LAPS_MODEL.predict(X)
 
-	pred = NC_LAPS_MODEL.predict(X)
+	#K.clear_session()
 	a, b = pred[0][0], pred[0][1]
 	t = a > b and b < 0.03 and a > 0.975
 
@@ -121,5 +139,5 @@ def LAPS(img, lines, size=10):
 
 	debug.image(img).points(points, size=5, \
 		color=debug.color()).save("laps_good_points")
-	
+	#K.clear_session()
 	return points
